@@ -16,13 +16,13 @@ def eratosthenes():
 
 """Board representation code"""
 def generate_empty_output_row(board_size):
-    FILL_CHARACTER = ' '
-    SEPERATOR_CHARACTER = ' '
+    FILL_CHARACTER = '.'
+    SEPERATOR_CHARACTER = '|'
     return ''.join([' ' + SEPERATOR_CHARACTER if (i + 1) % (board_size + 1) == 0 else ' ' + FILL_CHARACTER \
                     for i in range(board_size - 1 + (board_size * board_size))])
 
 def generate_output_row_seperator(board_size):
-    SEPERATOR_CHARACTER = ' '
+    SEPERATOR_CHARACTER = '-'
     return SEPERATOR_CHARACTER * (board_size * 2 * board_size + ((board_size - 1) * 2))
 
 def generate_board_representation(cell_occupants):
@@ -33,11 +33,12 @@ def generate_board_representation(cell_occupants):
     row_seperator = generate_output_row_seperator(board_size)
     for row in cell_occupants:
         board.extend([empty_row] * board_size)
-        board[-half_rounded_up] = list(board[-half_rounded_up])
         for i, occupant in enumerate(row):
             if not occupant is None:
-                board[-half_rounded_up][(half_rounded_up * 2 - 1) + (i * ((board_size + 1) * 2))] = occupant
-        board[-half_rounded_up] = ''.join(board[-half_rounded_up])
+                index = (half_rounded_up * 2 - 1) + (i * ((board_size + 1) * 2))
+                board[-half_rounded_up] = board[-half_rounded_up][: index] + \
+                                          occupant + \
+                                          board[-half_rounded_up][index + 1:]
         board.append(row_seperator)
     return '\n'.join(board[:-1])
 
